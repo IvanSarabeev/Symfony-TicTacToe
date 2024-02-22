@@ -14,12 +14,14 @@ class MainController extends AbstractController
         return $this->render('views/homepage.html.twig');
     }
 
+    // !TODO: Combine the services to work together
     #[Route('/single', name:'app_singlepage')]
     public function singlePlayerPage(): Response
     {
         return $this->render('views/single-player.html.twig');
     }
 
+    // !TODO: Combine the services to work together
     #[Route('/multi', name:'app_multipage')]
     public function multiPlayerPage(): Response
     {
