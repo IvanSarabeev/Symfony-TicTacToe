@@ -15,14 +15,14 @@ class MainController extends AbstractController
     }
 
     // !TODO: Combine the services to work together
-    #[Route('/single', name:'app_singlepage')]
+    #[Route('/single', name:'app_singlepage', methods: ["POST"])]
     public function singlePlayerPage(): Response
     {
         return $this->render('views/single-player.html.twig');
     }
 
     // !TODO: Combine the services to work together
-    #[Route('/multi', name:'app_multipage')]
+    #[Route('/multi', name:'app_multipage', methods: ["POST"])]
     public function multiPlayerPage(): Response
     {
         return $this->render('views/multi-player.html.twig');

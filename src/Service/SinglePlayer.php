@@ -22,7 +22,7 @@ class SinglePlayer extends  BoardCheck
         return $this->board;
     }
 
-    public function setMultiPlayerMoves($row, $col)
+    public function setMultiPlayerMoves($row, $col): void
     {
         if ($this->board[$row][$col] == null) {
             $this->board[$row][$col] = $this->player;
