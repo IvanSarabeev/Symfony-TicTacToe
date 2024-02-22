@@ -13,4 +13,16 @@ class MainController extends AbstractController
     {
         return $this->render('views/homepage.html.twig');
     }
+
+    #[Route('/single', name:'app_singlepage')]
+    public function singlePlayerPage(): Response
+    {
+        return $this->render('views/single-player.html.twig');
+    }
+
+    #[Route('/multi', name:'app_multipage')]
+    public function multiPlayerPage(): Response
+    {
+        return $this->render('views/multi-player.html.twig');
+    }
 }
