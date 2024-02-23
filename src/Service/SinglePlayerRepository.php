@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-class SinglePlayer extends  BoardCheck
+class SinglePlayerRepository extends BoardCheck
 {
     public function __construct()
     {
@@ -22,22 +22,22 @@ class SinglePlayer extends  BoardCheck
         return $this->board;
     }
 
-    public function setMultiPlayerMoves($row, $col): void
+    public function setPlayerMoves($row, $col): void
     {
         if ($this->board[$row][$col] == null) {
             $this->board[$row][$col] = $this->player;
             $this->player = $this->player === "X" ? "O" : "X";
         }
 
-        $this->gameStatus();
-        $this->renderWinner();
+        $this->checkGameResult();
+//        $this->renderWinner();
     }
 
     public function renderWinner(): void
     {
-        if ($this->gameStatus()) {
+        if ($this->checkGameResult()) {
             echo "<h2 class='d-flex align-items-center justify-content-center mb-3'>The winner is
-                        <strong class='pl-2 fs-3 d-flex align-items-center justify-content-center'>{$this->gameStatus()}</strong>
+                        <strong class='pl-2 fs-3 d-flex align-items-center justify-content-center'>{$this->checkGameResult()}</strong>
                     </h2>";
         } else {
             echo "<p class='text-center fs-4 fw-medium'>The game is still running</p>";

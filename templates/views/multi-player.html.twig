@@ -2,34 +2,29 @@
 
 {% block body %}
 
-    <div style="height: 100vh" class="d-flex flex-column align-items-center justify-content-center my-5 mx-auto">
+    <div style="height: 100vh" class="d-flex flex-column align-items-center justify-content-center mt-5 mx-auto">
         <h2 class="fs-1 fw-bold">Tic Tac Toe</h2>
-        <aside class="gap-5 d-flex align-items-center justify-content-center my-4 mx-auto">
-            <h3 class="fs-3 fw-semibold">Player vs Terminator</h3>
+        <aside class="gap-5 d-flex align-items-center justify-content-center my-5 mx-auto">
+            <h3 class="fs-3 fw-semibold">Player vs Player</h3>
         </aside>
 
         <form action="" method="post" class="d-block align-content-center mx-auto">
             <div>
-                {# TODO: Create loop for assoc array #}
-{#                <?php#}
-{#                        for ($i = 0; $i <= 2; $i++) {#}
-{#                            for ($j = 0; $j <= 2; $j++) {#}
-{#                                echo "<input type='submit' data-row='$i' data-col='$j' value='" . $gameBoard[$i][$j] . "' class='box-model' name='cell[$i][$j]'/>";#}
-{#                }#}
-{#                echo "<br>";#}
-{#                }#}
-{#                ?>#}
+                {% for i in 0..2 %}
+                    {% for j in 0..2 %}
+                        <input type='submit' data-row='{{ i }}' data-col='{{ j }}' value='{{ gameBoard[i][j] }}' class='box-model' name='cell[{{ i }}][{{ j }}]'/>
+                    {% endfor %}
+                    <br>
+                {% endfor %}
             </div>
-
             <div class="row align-items-center justify-content-center my-3 mx-auto">
                 <div class="col">
-                    <a href="{{ path('app_homepage') }}" target="_parent" type='submit' id='reset-bot' class='btn btn-info'>Exit Game</a>
+                    <a target="_parent" href="{{ path('app_homepage') }}" id='reset' class='btn btn-info'>Exit Game</a>
                 </div>
                 <div class="col">
-                    <a class="btn btn-warning" target="_parent" id="switch" href="{{ path('app_singlepage') }}">Switch Mode</a>
+                    <a class="btn btn-warning" target="_parent" id="switch" href="{{ path('app_single') }}">Switch Mode</a>
                 </div>
             </div>
-
         </form>
     </div>
 

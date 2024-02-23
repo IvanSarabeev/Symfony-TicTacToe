@@ -7,7 +7,7 @@ class BoardCheck
     protected array $board = [];
     protected string $player = "X";
 
-    public function gameStatus()
+    public function checkGameResult()
     {
         for ($i = 0; $i < 3; $i++) {
             if ($this->board[$i][0] != ''

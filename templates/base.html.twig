@@ -12,9 +12,9 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body class="d-flex flex-column container-fluid wallpaper">
+    <body class="d-flex flex-column wallpaper">
         <header>
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <nav class="navbar navbar-expand-lg navbar-dark px-4 bg-dark">
                 <a class="navbar-brand" href="{{ path('app_homepage') }}">TicTac</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,10 +26,10 @@
                             <a class="nav-link" href="{{ path('app_homepage') }}">Home <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_singlepage') }}">Player</a>
+                            <a class="nav-link" href="{{ path('app_multi') }}">Player</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_multipage') }}">Computer</a>
+                            <a class="nav-link" href="{{ path('app_single') }}">Computer</a>
                         </li>
                     </ul>
                 </div>
