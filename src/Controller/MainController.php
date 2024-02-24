@@ -7,15 +7,20 @@ use App\Service\SinglePlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class MainController extends AbstractController
 {
+    private SessionInterface $session;
     private MultiPlayerRepository $multiPlayerRepository;
     private SinglePlayerRepository $singlePlayerRepository;
-    public function __construct()
+
+    public function __construct(SessionInterface $session, MultiPlayerRepository $multiPlayerRepository, SinglePlayerRepository $singlePlayerRepository)
     {
-        $this->multiPlayerRepository = new MultiPlayerRepository();
-        $this->singlePlayerRepository = new SinglePlayerRepository();
+        $this->session = $session;
+        $this->multiPlayerRepository = $multiPlayerRepository;
+        $this->singlePlayerRepository = $singlePlayerRepository;
     }
 
     #[Route('/', name: 'app_homepage')]
@@ -45,7 +50,7 @@ class MainController extends AbstractController
             throw new \Error($exception);
 
         }
-        // TODO: Keep track on the players move
+
         $gameResult = $this->multiPlayerRepository->getBoard();
 
         return $this->render('views/single-player.html.twig', [
@@ -69,7 +74,6 @@ class MainController extends AbstractController
                 $this->singlePlayerRepository->setPlayerMoves($row, $col);
                 $this->singlePlayerRepository->checkGameResult();
 
-                // TODO: Keep track on the players move
             }
 
         } catch(\Exception $exception) {

@@ -2,12 +2,18 @@
 
 namespace App\Service;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 class SinglePlayerRepository extends BoardCheck
 {
-    public function __construct()
+    private SessionInterface $session;
+
+    public function __construct($session)
     {
-        if (!empty($_SESSION['gameBoard'])) {
-            $gameBoard = unserialize($_SESSION['gameBoard']);
+        $this->session = $session;
+
+        if ($this->session->has('gameBoard')) {
+            $gameBoard = unserialize($this->session->get('gameBoard'));
 
             $this->board = $gameBoard->board;
             $this->player = $gameBoard->player;
@@ -46,7 +52,13 @@ class SinglePlayerRepository extends BoardCheck
 
     public function resetGame(): void
     {
-        unset($_SESSION['gameBoard']);
+        $this->session->remove('gameBoard');
+    }
+
+    public function saveGame(): void
+    {
+        $gameData = serialize(['board' => $this->board, 'player' => $this->player]);
+        $this->session->set('gameBoard', $gameData);
     }
 
 }
