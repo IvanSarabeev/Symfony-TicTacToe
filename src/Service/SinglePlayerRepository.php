@@ -26,6 +26,6 @@ class SinglePlayerRepository extends BoardCheck
         }
 
         $this->checkGameResult();
-        $this->renderWinner();
+//        $this->renderWinner();
     }
 }

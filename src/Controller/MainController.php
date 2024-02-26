@@ -16,6 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 {
     private MultiPlayerRepository $multiPlayerRepository;
     private SinglePlayerRepository $singlePlayerRepository;
+    private RequestStack $requestStack;
 
     public function __construct(RequestStack $requestStack)
     {
@@ -52,8 +53,8 @@ use Symfony\Component\Routing\Attribute\Route;
         }
 
         $session = $request->getSession();
-
         $gameResult = $this->multiPlayerRepository->getBoard();
+        $announcement = $this->singlePlayerRepository->renderWinner();
 
         if (!$gameResult) {
             throw $this->createNotFoundException('The page does\'t exit');
@@ -61,6 +62,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
         return $this->render('views/single-player.html.twig', [
             'gameBoard' => $gameResult,
+            'announce' => $announcement,
         ]);
     }
 
@@ -70,37 +72,32 @@ use Symfony\Component\Routing\Attribute\Route;
         $selectedCell = $_POST['cell'] ?? null;
 
         try {
-            $session = $request->getSession();
-
             if (is_array($selectedCell)) {
                 $rowKeys = array_keys($selectedCell);
                 $row = array_shift($rowKeys);
 
-                if ($session->has('gameBoard')) {
-                    $gameResult = $session->get('gameBoard');
-                    $session->set('gameBoard', $gameResult);
-                    $cellKeys = array_keys($_POST['cell'][$row]);
-                    $col = array_shift($cellKeys);
+                $cellKeys = array_keys($_POST['cell'][$row]);
+                $col = array_shift($cellKeys);
 
-                    $this->singlePlayerRepository->setPlayerMoves($row, $col);
-                    $this->singlePlayerRepository->checkGameResult();
-                    // TODO: Keep track on the players move
-                } else {
-                    $session->clear();
-                }
-            }
-
-            $gameResult = $this->singlePlayerRepository->getBoard();
-
-            if (!$gameResult) {
-                throw $this->createNotFoundException('The page does\'t exit');
+                $this->singlePlayerRepository->setPlayerMoves($row, $col);
+                $this->singlePlayerRepository->checkGameResult();
+                // TODO: Keep track on the players move
             }
         } catch (\Exception $exception) {
             throw new \Error($exception);
         }
 
+        $session = $request->getSession();
+        $gameResult = $this->singlePlayerRepository->getBoard();
+        $announcement = $this->singlePlayerRepository->renderWinner();
+
+        if (!$gameResult) {
+            throw $this->createNotFoundException('The page does\'t exit');
+        }
+
         return $this->render('views/multi-player.html.twig', [
-            'gameBoard' => $this->singlePlayerRepository->getBoard(),
+            'gameBoard' => $gameResult,
+            'announce' => $announcement,
         ]);
     }
 }

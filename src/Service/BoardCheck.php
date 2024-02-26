@@ -38,14 +38,12 @@ class BoardCheck
         }
     }
 
-    public function renderWinner(): void
+    public function renderWinner(): mixed
     {
         if ($this->checkGameResult()) {
-            echo "<h2 class='d-flex align-items-center justify-content-center mb-3'>The winner is
-                        <strong class='pl-2 fs-3 d-flex align-items-center justify-content-center'>{$this->checkGameResult()}</strong>
-                    </h2>";
+            return $this->checkGameResult();
         } else {
-            echo "<p class='text-center fs-4 fw-medium'>The game is still running</p>";
+            return "The game is still running";
         }
     }
 }
