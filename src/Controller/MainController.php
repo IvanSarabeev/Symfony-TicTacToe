@@ -14,7 +14,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 #[AllowDynamicProperties] class MainController extends AbstractController
 {
-    private $requestStack;
     private MultiPlayerRepository $multiPlayerRepository;
     private SinglePlayerRepository $singlePlayerRepository;
 
@@ -23,7 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
         $this->requestStack = $requestStack;
 
         $this->multiPlayerRepository = new MultiPlayerRepository($requestStack);
-        $this->singlePlayerRepository = new SinglePlayerRepository();
+        $this->singlePlayerRepository = new SinglePlayerRepository($requestStack);
     }
 
     #[Route('/', name: 'app_homepage')]

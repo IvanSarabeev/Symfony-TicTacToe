@@ -9,7 +9,7 @@ class MultiPlayerRepository extends BoardCheck
 {
     private SessionInterface $session;
 
-    public function __construct(private RequestStack $requestStack)
+    public function __construct(private readonly RequestStack $requestStack)
     {
         $this->player = "X";
         $this->board = array_fill(0,3,array_fill(0,3,null));
