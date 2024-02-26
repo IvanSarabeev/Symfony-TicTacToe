@@ -2,30 +2,59 @@
 
 namespace App\Service;
 
+use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SinglePlayerRepository extends BoardCheck
 {
+    const SESSION_SINGLE_GAME = 'gameBoard';
+
     public function __construct(private readonly RequestStack $requestStack)
     {
-        $this->player = "X";
-        $this->board = array_fill(0, 3, array_fill(0, 3, null));
+        if (
+            $this->requestStack->getCurrentRequest()
+            && $this->requestStack->getCurrentRequest()->getSession()
+            && $this->requestStack->getCurrentRequest()->getSession()->has(self::SESSION_SINGLE_GAME, $this->getBoard())
+            && $this->requestStack->getCurrentRequest()->getSession()->get(self::SESSION_SINGLE_GAME, $this->getBoard())
+        ) {
+            $gameData = $this->requestStack->getCurrentRequest()->getSession()->get(self::SESSION_SINGLE_GAME);
+
+            $this->player = $gameData['player'];
+            $this->board = $gameData['board'];
+        } else {
+            $this->board = array_fill(0, 3, array_fill(0, 3, null));
+            $this->player = "X";
+        }
     }
 
-    public function getBoard(): array
+    public function getBoard(): array|bool
     {
         return $this->board;
     }
 
-    public function setPlayerMoves($row, $col): void
+    #[NoReturn] public function setPlayerMoves($row, $col): void
     {
+        $session = $this->requestStack->getCurrentRequest()->getSession();
+
         if ($this->board[$row][$col] == null) {
             $this->board[$row][$col] = $this->player;
-            $session = $this->requestStack->getSession();
+
             $this->player = $this->player === "X" ? "O" : "X";
         }
 
         $this->checkGameResult();
-//        $this->renderWinner();
+
+        $session->set(self::SESSION_SINGLE_GAME, [
+            'board' => $this->board,
+            'player' => $this->player
+        ]);
+    }
+
+    // ?TODO: Create an method to remove local session state
+    public function removeGameSession(): void
+    {
+        $removeSession = $this->requestStack->getCurrentRequest()->getSession();
+        $removeSession->remove(self::SESSION_SINGLE_GAME);
     }
 }

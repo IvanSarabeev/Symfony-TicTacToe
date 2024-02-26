@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 {
     private MultiPlayerRepository $multiPlayerRepository;
     private SinglePlayerRepository $singlePlayerRepository;
-    private RequestStack $requestStack;
+//    private RequestStack $requestStack;
 
     public function __construct(RequestStack $requestStack)
     {
@@ -52,15 +52,13 @@ use Symfony\Component\Routing\Attribute\Route;
             throw new \Error($exception);
         }
 
-        $session = $request->getSession();
         $gameResult = $this->multiPlayerRepository->getBoard();
-        $announcement = $this->singlePlayerRepository->renderWinner();
+        // TODO: I need to pass the $session property as an parameter
 
-        if (!$gameResult) {
-            throw $this->createNotFoundException('The page does\'t exit');
-        }
+        $announcement = $this->multiPlayerRepository->renderWinner();
 
         return $this->render('views/single-player.html.twig', [
+//            'gameBoard' => $this->requestStack->getSession()->get("gameBot"),
             'gameBoard' => $gameResult,
             'announce' => $announcement,
         ]);
@@ -69,25 +67,23 @@ use Symfony\Component\Routing\Attribute\Route;
     #[Route('/multi', name: 'app_single')]
     public function singlePlayerPage(Request $request): Response
     {
-        $selectedCell = $_POST['cell'] ?? null;
+        $data = $request->request->all();
+        $selectedCell = $data['cell'] ?? null;
 
         try {
             if (is_array($selectedCell)) {
                 $rowKeys = array_keys($selectedCell);
                 $row = array_shift($rowKeys);
 
-                $cellKeys = array_keys($_POST['cell'][$row]);
+                $cellKeys = array_keys($selectedCell[$row]);
                 $col = array_shift($cellKeys);
 
                 $this->singlePlayerRepository->setPlayerMoves($row, $col);
-                $this->singlePlayerRepository->checkGameResult();
-                // TODO: Keep track on the players move
             }
         } catch (\Exception $exception) {
             throw new \Error($exception);
         }
 
-        $session = $request->getSession();
         $gameResult = $this->singlePlayerRepository->getBoard();
         $announcement = $this->singlePlayerRepository->renderWinner();
 
