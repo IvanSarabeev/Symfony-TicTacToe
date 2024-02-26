@@ -2,19 +2,27 @@
 
 namespace App\Controller;
 
+use AllowDynamicProperties;
 use App\Service\MultiPlayerRepository;
 use App\Service\SinglePlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-class MainController extends AbstractController
+#[AllowDynamicProperties] class MainController extends AbstractController
 {
+    private $requestStack;
     private MultiPlayerRepository $multiPlayerRepository;
     private SinglePlayerRepository $singlePlayerRepository;
-    public function __construct()
+
+    public function __construct(RequestStack $requestStack)
     {
-        $this->multiPlayerRepository = new MultiPlayerRepository();
+        $this->requestStack = $requestStack;
+
+        $this->multiPlayerRepository = new MultiPlayerRepository($requestStack);
         $this->singlePlayerRepository = new SinglePlayerRepository();
     }
 
@@ -25,7 +33,7 @@ class MainController extends AbstractController
     }
 
     #[Route('/single', name: 'app_multi')]
-    public function multiPlayerPage(): Response
+    public function multiPlayerPage(Request $request): Response
     {
         $selectedCell = $_POST['cell'] ?? null;
 
@@ -40,13 +48,17 @@ class MainController extends AbstractController
                 $this->multiPlayerRepository->getPlayerMove($row, $col);
                 $this->multiPlayerRepository->setBotMoves();
             }
-
-        } catch(\Exception $exception) {
+        } catch (\Exception $exception) {
             throw new \Error($exception);
-
         }
-        // TODO: Keep track on the players move
+
+        $session = $request->getSession();
+
         $gameResult = $this->multiPlayerRepository->getBoard();
+
+        if (!$gameResult) {
+            throw $this->createNotFoundException('The page does\'t exit');
+        }
 
         return $this->render('views/single-player.html.twig', [
             'gameBoard' => $gameResult,
@@ -54,25 +66,37 @@ class MainController extends AbstractController
     }
 
     #[Route('/multi', name: 'app_single')]
-    public function singlePlayerPage(): Response
+    public function singlePlayerPage(Request $request): Response
     {
         $selectedCell = $_POST['cell'] ?? null;
 
         try {
+            $session = $request->getSession();
+
             if (is_array($selectedCell)) {
                 $rowKeys = array_keys($selectedCell);
                 $row = array_shift($rowKeys);
 
-                $cellKeys = array_keys($_POST['cell'][$row]);
-                $col = array_shift($cellKeys);
+                if ($session->has('gameBoard')) {
+                    $gameResult = $session->get('gameBoard');
+                    $session->set('gameBoard', $gameResult);
+                    $cellKeys = array_keys($_POST['cell'][$row]);
+                    $col = array_shift($cellKeys);
 
-                $this->singlePlayerRepository->setPlayerMoves($row, $col);
-                $this->singlePlayerRepository->checkGameResult();
-
-                // TODO: Keep track on the players move
+                    $this->singlePlayerRepository->setPlayerMoves($row, $col);
+                    $this->singlePlayerRepository->checkGameResult();
+                    // TODO: Keep track on the players move
+                } else {
+                    $session->clear();
+                }
             }
 
-        } catch(\Exception $exception) {
+            $gameResult = $this->singlePlayerRepository->getBoard();
+
+            if (!$gameResult) {
+                throw $this->createNotFoundException('The page does\'t exit');
+            }
+        } catch (\Exception $exception) {
             throw new \Error($exception);
         }
 
