@@ -4,7 +4,6 @@ namespace App\Service;
 
 use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SinglePlayerRepository extends BoardCheck
 {
@@ -15,7 +14,7 @@ class SinglePlayerRepository extends BoardCheck
         if (
             $this->requestStack->getCurrentRequest()
             && $this->requestStack->getCurrentRequest()->getSession()
-            && $this->requestStack->getCurrentRequest()->getSession()->has(self::SESSION_SINGLE_GAME, $this->getBoard())
+            && $this->requestStack->getCurrentRequest()->getSession()->has(self::SESSION_SINGLE_GAME)
             && $this->requestStack->getCurrentRequest()->getSession()->get(self::SESSION_SINGLE_GAME, $this->getBoard())
         ) {
             $gameData = $this->requestStack->getCurrentRequest()->getSession()->get(self::SESSION_SINGLE_GAME);
@@ -51,10 +50,16 @@ class SinglePlayerRepository extends BoardCheck
         ]);
     }
 
-    // ?TODO: Create an method to remove local session state
+
+    /** I don't use it because after the session is reset, session begins to override every new session.
+     * @return void
+     */
     public function removeGameSession(): void
     {
-        $removeSession = $this->requestStack->getCurrentRequest()->getSession();
-        $removeSession->remove(self::SESSION_SINGLE_GAME);
+         $removeSession = $this->requestStack->getCurrentRequest()->getSession();
+
+         if ($removeSession->isStarted() && $removeSession->has(self::SESSION_SINGLE_GAME)) {
+            $removeSession->remove(self::SESSION_SINGLE_GAME);
+         }
     }
 }

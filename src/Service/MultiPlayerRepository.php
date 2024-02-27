@@ -2,20 +2,29 @@
 
 namespace App\Service;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class MultiPlayerRepository extends BoardCheck
 {
-    private $requestStack;
     const SESSION_MULTIPLAYER = 'gameBot';
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(private readonly RequestStack $requestStack)
     {
-        $this->requestStack = $requestStack;
+        if (
+            $this->requestStack->getCurrentRequest()
+            && $this->requestStack->getCurrentRequest()->getSession()
+            && $this->requestStack->getCurrentRequest()->getSession()->has(self::SESSION_MULTIPLAYER)
+            && $this->requestStack->getCurrentRequest()->getSession()->get(self::SESSION_MULTIPLAYER, $this->getBoard())
+        ) {
+            $boardData = $this->requestStack->getCurrentRequest()->getSession()->get(self::SESSION_MULTIPLAYER);
 
-        $this->player = "X";
-        $this->board = array_fill(0,3,array_fill(0,3,null));
+            $this->player = $boardData['player'];
+            $this->board = $boardData['board'];
+        } else {
+            $this->player = "X";
+            $this->board = array_fill(0,3,array_fill(0,3,null));
+        }
     }
 
     public function getBoard(): array
@@ -32,55 +41,48 @@ class MultiPlayerRepository extends BoardCheck
 
     public function setBotMoves(): void
     {
+        $session = $this->requestStack->getCurrentRequest()->getSession();
 
-        $session = $this->requestStack->getSession();
+//        $this->getPlayerMove($row, $col);
 
-        if (empty($session->has(self::SESSION_MULTIPLAYER))) {
-            $gameSession = $session->get(self::SESSION_MULTIPLAYER, $this->getBoard());
-            dump($gameSession);
+        $emptyCells = [];
+
+        foreach ($this->board as $rowKeys => $row) {
+            foreach ($row as $colKeys => $col) {
+                if ($col === null) {
+                    $emptyCells[][] = [
+                        'row' => $rowKeys,
+                        'col' => $colKeys,
+                    ];
+                }
+            }
         }
 
-        if ($this->requestStack->getSession()->isStarted()) {
-            $emptyCells = [];
+        if (!empty($emptyCells)) {
+            $randIndex = array_rand((array)$emptyCells);
+            $randRow = $emptyCells[$randIndex];
 
-            foreach ($this->board as $rowKeys => $row) {
-                foreach ($row as $colKeys => $col) {
-                    if ($col === null) {
-                        $emptyCells[][] = [
-                            'row' => $rowKeys,
-                            'col' => $colKeys,
-                        ];
-                    }
+            if (isset($_POST['row'])) {
+                if (isset($_POST['col'])) {
+                    $this->board[$randRow['row']][$randRow['col']] = $this->player;
                 }
             }
 
-            if (!empty($emptyCells)) {
-                $randIndex = array_rand((array)$emptyCells);
-                $randRow = $emptyCells[$randIndex];
-
-                if (isset($_POST['row'])) {
-                    if (isset($_POST['col'])) {
-                        $this->board[$randRow['row']][$randRow['col']] = $this->player;
-                    }
-                }
-
-                $this->player = $this->player === "X" ? "O" : "X";
-            }
-
-            $this->checkGameResult();
+            $this->player = $this->player === "X" ? "O" : "X";
         }
 
-//        $session->set(self::SESSION_MULTIPLAYER, $gameSession);
-//        dump($session);
+        $this->checkGameResult();
 
-        // Get session
-        $session->get(self::SESSION_MULTIPLAYER);
+        $session->set(self::SESSION_MULTIPLAYER, [
+            'board' => $this->board,
+            'player' => $this->player,
+        ]);
     }
 
     // ?TODO: Create an method to remove local session state
     public function removeGameSession(): void
     {
-        $removeSession = $this->requestStack->getSession();
+        $removeSession = $this->requestStack->getCurrentRequest()->getSession();
         $removeSession->remove(self::SESSION_MULTIPLAYER);
     }
 }

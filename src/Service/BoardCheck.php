@@ -38,12 +38,22 @@ class BoardCheck
         }
     }
 
-    public function renderWinner(): mixed
+    public function renderWinner(): string
     {
         if ($this->checkGameResult()) {
-            return $this->checkGameResult();
+            return 'The winner is player: ' . $this->checkGameResult();
+        } elseif ($this->checkGameResult() != '') {
+            return 'The game is Tied';
         } else {
             return "The game is still running";
         }
+    }
+
+    public function gameStatus(): bool
+    {
+        if ($this->checkGameResult() != '') {
+            return false;
+        }
+        return !($this->checkGameResult() !== ' ');
     }
 }

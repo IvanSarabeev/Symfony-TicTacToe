@@ -9,14 +9,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[AllowDynamicProperties] class MainController extends AbstractController
 {
     private MultiPlayerRepository $multiPlayerRepository;
     private SinglePlayerRepository $singlePlayerRepository;
-//    private RequestStack $requestStack;
 
     public function __construct(RequestStack $requestStack)
     {
@@ -35,7 +33,8 @@ use Symfony\Component\Routing\Attribute\Route;
     #[Route('/single', name: 'app_multi')]
     public function multiPlayerPage(Request $request): Response
     {
-        $selectedCell = $_POST['cell'] ?? null;
+        $data = $request->request->all();
+        $selectedCell = $data['cell'] ?? null;
 
         try {
             if (is_array($selectedCell)) {
@@ -53,14 +52,17 @@ use Symfony\Component\Routing\Attribute\Route;
         }
 
         $gameResult = $this->multiPlayerRepository->getBoard();
-        // TODO: I need to pass the $session property as an parameter
-
         $announcement = $this->multiPlayerRepository->renderWinner();
+//        $removeSession = $this->multiPlayerRepository->removeGameSession();
+
+        if (!$gameResult) {
+            throw $this->createNotFoundException('The page does\'t exist');
+        }
 
         return $this->render('views/single-player.html.twig', [
-//            'gameBoard' => $this->requestStack->getSession()->get("gameBot"),
             'gameBoard' => $gameResult,
             'announce' => $announcement,
+//            'remove' => $removeSession,
         ]);
     }
 
@@ -86,14 +88,18 @@ use Symfony\Component\Routing\Attribute\Route;
 
         $gameResult = $this->singlePlayerRepository->getBoard();
         $announcement = $this->singlePlayerRepository->renderWinner();
+//        $removeSession = $this->singlePlayerRepository->removeGameSession();
+        $showStatus = $this->singlePlayerRepository->gameStatus();
 
         if (!$gameResult) {
-            throw $this->createNotFoundException('The page does\'t exit');
+            throw $this->createNotFoundException('The page does\'t exist');
         }
 
         return $this->render('views/multi-player.html.twig', [
             'gameBoard' => $gameResult,
             'announce' => $announcement,
+//            'remove' => $removeSession,
+            'status' => $showStatus,
         ]);
     }
 }
