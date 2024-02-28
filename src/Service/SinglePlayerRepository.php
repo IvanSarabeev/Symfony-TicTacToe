@@ -32,6 +32,7 @@ class SinglePlayerRepository extends BoardCheck
         return $this->board;
     }
 
+
     #[NoReturn] public function setPlayerMoves($row, $col): void
     {
         $session = $this->requestStack->getCurrentRequest()->getSession();
@@ -51,7 +52,7 @@ class SinglePlayerRepository extends BoardCheck
     }
 
 
-    /**
+    /** Remove existing session via it's name
      * @return void
      */
     public function removeGameSession(): void

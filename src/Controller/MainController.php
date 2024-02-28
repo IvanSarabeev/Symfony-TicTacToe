@@ -87,6 +87,7 @@ use Symfony\Component\Routing\Attribute\Route;
         $gameResult = $this->singlePlayerRepository->getBoard();
         $announcement = $this->singlePlayerRepository->renderWinner();
         $showStatus = $this->singlePlayerRepository->gameStatus();
+        $resetGame = 'ok';
 
         if (!$gameResult) {
             throw $this->createNotFoundException('The page does\'t exist');
@@ -95,7 +96,8 @@ use Symfony\Component\Routing\Attribute\Route;
         return $this->render('views/multi-player.html.twig', [
             'gameBoard' => $gameResult,
             'announce' => $announcement,
-            'status' => $showStatus,
+            'gameStatus' => $showStatus,
+            'resetSession' => $resetGame,
         ]);
     }
 

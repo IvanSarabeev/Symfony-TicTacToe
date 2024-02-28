@@ -51,9 +51,20 @@ class BoardCheck
 
     public function gameStatus(): bool
     {
-        if ($this->checkGameResult() != '') {
+        if ($this->checkGameResult() !== '') {
             return false;
         }
-        return !($this->checkGameResult() !== ' ');
+
+        $emptyCell = 0;
+
+        foreach ($this->board as $row) {
+            foreach ($row as $cell) {
+                if ($cell === '') {
+                    $emptyCell++;
+                }
+            }
+        }
+
+        return $emptyCell === 0;
     }
 }
