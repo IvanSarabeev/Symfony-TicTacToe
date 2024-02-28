@@ -2,13 +2,14 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\Request;
+use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class MultiPlayerRepository extends BoardCheck
 {
     const SESSION_MULTIPLAYER = 'gameBot';
 
+    //private readonly Request $request
     public function __construct(private readonly RequestStack $requestStack)
     {
         if (
@@ -39,14 +40,12 @@ class MultiPlayerRepository extends BoardCheck
         }
     }
 
-    public function setBotMoves(): void
+    #[NoReturn] public function setBotMoves(): void
     {
         $session = $this->requestStack->getCurrentRequest()->getSession();
-
-//        $this->getPlayerMove($row, $col);
-
         $emptyCells = [];
 
+        // Работи правилно
         foreach ($this->board as $rowKeys => $row) {
             foreach ($row as $colKeys => $col) {
                 if ($col === null) {
@@ -62,8 +61,10 @@ class MultiPlayerRepository extends BoardCheck
             $randIndex = array_rand((array)$emptyCells);
             $randRow = $emptyCells[$randIndex];
 
-            if (isset($_POST['row'])) {
-                if (isset($_POST['col'])) {
+            $request = $this->requestStack->getCurrentRequest()->request;
+
+            if ($request->get('row') !== null) {
+                if ($request->get('col') !== null) {
                     $this->board[$randRow['row']][$randRow['col']] = $this->player;
                 }
             }
@@ -79,7 +80,6 @@ class MultiPlayerRepository extends BoardCheck
         ]);
     }
 
-    // ?TODO: Create an method to remove local session state
     public function removeGameSession(): void
     {
         $removeSession = $this->requestStack->getCurrentRequest()->getSession();

@@ -41,7 +41,7 @@ use Symfony\Component\Routing\Attribute\Route;
                 $rowKeys = array_keys($selectedCell);
                 $row = array_shift($rowKeys);
 
-                $cellKeys = array_keys($_POST['cell'][$row]);
+                $cellKeys = array_keys($data['cell'][$row]);
                 $col = array_shift($cellKeys);
 
                 $this->multiPlayerRepository->getPlayerMove($row, $col);
@@ -87,7 +87,6 @@ use Symfony\Component\Routing\Attribute\Route;
         $gameResult = $this->singlePlayerRepository->getBoard();
         $announcement = $this->singlePlayerRepository->renderWinner();
         $showStatus = $this->singlePlayerRepository->gameStatus();
-        $resetGame = 'ok';
 
         if (!$gameResult) {
             throw $this->createNotFoundException('The page does\'t exist');
@@ -97,7 +96,6 @@ use Symfony\Component\Routing\Attribute\Route;
             'gameBoard' => $gameResult,
             'announce' => $announcement,
             'gameStatus' => $showStatus,
-            'resetSession' => $resetGame,
         ]);
     }
 
