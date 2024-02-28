@@ -51,7 +51,7 @@ class SinglePlayerRepository extends BoardCheck
     }
 
 
-    /** I don't use it because after the session is reset, session begins to override every new session.
+    /**
      * @return void
      */
     public function removeGameSession(): void

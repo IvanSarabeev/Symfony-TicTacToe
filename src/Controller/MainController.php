@@ -53,7 +53,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
         $gameResult = $this->multiPlayerRepository->getBoard();
         $announcement = $this->multiPlayerRepository->renderWinner();
-//        $removeSession = $this->multiPlayerRepository->removeGameSession();
 
         if (!$gameResult) {
             throw $this->createNotFoundException('The page does\'t exist');
@@ -62,7 +61,6 @@ use Symfony\Component\Routing\Attribute\Route;
         return $this->render('views/single-player.html.twig', [
             'gameBoard' => $gameResult,
             'announce' => $announcement,
-//            'remove' => $removeSession,
         ]);
     }
 
@@ -88,7 +86,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
         $gameResult = $this->singlePlayerRepository->getBoard();
         $announcement = $this->singlePlayerRepository->renderWinner();
-//        $removeSession = $this->singlePlayerRepository->removeGameSession();
         $showStatus = $this->singlePlayerRepository->gameStatus();
 
         if (!$gameResult) {
@@ -98,8 +95,21 @@ use Symfony\Component\Routing\Attribute\Route;
         return $this->render('views/multi-player.html.twig', [
             'gameBoard' => $gameResult,
             'announce' => $announcement,
-//            'remove' => $removeSession,
             'status' => $showStatus,
         ]);
+    }
+
+    #[Route('/remove-session', name: 'remove-game-session')]
+    public function removeGameSession(): Response
+    {
+        if ($this->requestStack->getSession()->has('gameBoard')) {
+            $this->singlePlayerRepository->removeGameSession();
+        } elseif ($this->requestStack->getSession()->has('gameBot')) {
+            $this->multiPlayerRepository->removeGameSession();
+        } else {
+            throw new \Error('Session cound\'t be removed');
+        }
+
+        return $this->redirectToRoute('app_homepage');
     }
 }

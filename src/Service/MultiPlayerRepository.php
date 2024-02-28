@@ -83,6 +83,9 @@ class MultiPlayerRepository extends BoardCheck
     public function removeGameSession(): void
     {
         $removeSession = $this->requestStack->getCurrentRequest()->getSession();
-        $removeSession->remove(self::SESSION_MULTIPLAYER);
+
+        if ($removeSession->isStarted() && $removeSession->has(self::SESSION_MULTIPLAYER)) {
+            $removeSession->remove(self::SESSION_MULTIPLAYER);
+        }
     }
 }
