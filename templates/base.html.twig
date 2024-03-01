@@ -32,13 +32,12 @@
                             <a class="nav-link" href="{{ path('app_single') }}">Computer</a>
                         </li>
                     </ul>
-                    <div class="d-flex gap-2">
-                        <a class="nav-link" href="{{ path('app_sign_page') }}">
-                            Sign Up
-                        </a>
-                        |
-                        <a class="nav-link text-light" href="{{ path('app_sign_page') }}">
+                    <div class="d-flex align-items-center">
+                        <a href="{{ path('app_sign_page') }}" data-mdb-ripple-init type="button" class="nav-link pr-4 me-3">
                             Login
+                        </a>
+                        <a href="{{ path('app_sign_page') }}" data-mdb-ripple-init type="button" class="btn btn-primary me-3">
+                            Sign up for free
                         </a>
                     </div>
                 </div>
