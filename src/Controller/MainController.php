@@ -45,7 +45,7 @@ use Symfony\Component\Routing\Attribute\Route;
                 $col = array_shift($cellKeys);
 
                 $this->multiPlayerRepository->getPlayerMove($row, $col);
-                $this->multiPlayerRepository->setBotMoves();
+                $this->multiPlayerRepository->setBotMoves($request);
             }
         } catch (\Exception $exception) {
             throw new \Error($exception);
@@ -102,9 +102,9 @@ use Symfony\Component\Routing\Attribute\Route;
     #[Route('/remove-session', name: 'remove-game-session')]
     public function removeGameSession(): Response
     {
-        if ($this->requestStack->getSession()->has('gameBoard')) {
+        if ($this->requestStack->getSession()->isStarted() && $this->requestStack->getSession()->has('gameBoard')) {
             $this->singlePlayerRepository->removeGameSession();
-        } elseif ($this->requestStack->getSession()->has('gameBot')) {
+        } elseif ($this->requestStack->getSession()->isStarted() && $this->requestStack->getSession()->has('gameBot')) {
             $this->multiPlayerRepository->removeGameSession();
         } else {
             throw new \Error('Session cound\'t be removed');

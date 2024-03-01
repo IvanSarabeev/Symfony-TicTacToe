@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use JetBrains\PhpStorm\NoReturn;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class MultiPlayerRepository extends BoardCheck
@@ -40,12 +41,12 @@ class MultiPlayerRepository extends BoardCheck
         }
     }
 
-    #[NoReturn] public function setBotMoves(): void
+    #[NoReturn] public function setBotMoves(Request $request): void
     {
         $session = $this->requestStack->getCurrentRequest()->getSession();
+
         $emptyCells = [];
 
-        // Работи правилно
         foreach ($this->board as $rowKeys => $row) {
             foreach ($row as $colKeys => $col) {
                 if ($col === null) {
@@ -61,23 +62,19 @@ class MultiPlayerRepository extends BoardCheck
             $randIndex = array_rand((array)$emptyCells);
             $randRow = $emptyCells[$randIndex];
 
-            $request = $this->requestStack->getCurrentRequest()->request;
-
-            if ($request->get('row') !== null) {
+            if ($request->get('row') !== 0) {
                 if ($request->get('col') !== null) {
                     $this->board[$randRow['row']][$randRow['col']] = $this->player;
                 }
+                $this->player = $this->player === "X" ? "O" : "X";
             }
+            $this->checkGameResult();
 
-            $this->player = $this->player === "X" ? "O" : "X";
+            $session->set(self::SESSION_MULTIPLAYER, [
+                'board' => $this->board,
+                'player' => $this->player,
+            ]);
         }
-
-        $this->checkGameResult();
-
-        $session->set(self::SESSION_MULTIPLAYER, [
-            'board' => $this->board,
-            'player' => $this->player,
-        ]);
     }
 
     public function removeGameSession(): void
