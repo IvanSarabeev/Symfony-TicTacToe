@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\SinglePlayerRepository;
+use App\Service\SingleService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +12,7 @@ class MultiController extends AbstractController
 {
 
     #[Route('/multi', name: 'app_single')]
-    public function singlePlayerPage(Request $request, SinglePlayerRepository $playerRepository): Response
+    public function singlePlayerPage(Request $request, SingleService $singleService): Response
     {
         $data = $request->request->all();
         $selectedCell = $data['cell'] ?? null;
@@ -25,15 +25,15 @@ class MultiController extends AbstractController
                 $cellKeys = array_keys($data['cell'][$row]);
                 $col = array_shift($cellKeys);
 
-                $playerRepository->setPlayerMoves($row, $col);
+                $singleService->setPlayerMoves($row, $col);
             }
         } catch (\Exception $exception) {
             throw new \Error($exception);
         }
 
-        $gameResult = $playerRepository->getBoard();
-        $announce = $playerRepository->renderWinner();
-        $showStatus = $playerRepository->gameStatus();
+        $gameResult = $singleService->getBoard();
+        $announce = $singleService->renderWinner();
+        $showStatus = $singleService->gameStatus();
 
         return $this->render('multi/multi-player.html.twig', [
             'gameBoard' => $gameResult,

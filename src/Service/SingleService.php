@@ -5,7 +5,7 @@ namespace App\Service;
 use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class SinglePlayerRepository extends BoardCheck
+class SingleService extends BoardCheck
 {
     const SESSION_SINGLE_GAME = 'gameBoard';
 
