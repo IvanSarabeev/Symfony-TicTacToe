@@ -6,11 +6,10 @@ use JetBrains\PhpStorm\NoReturn;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-class MultiPlayerRepository extends BoardCheck
+class MultiService extends BoardCheck
 {
     const SESSION_MULTIPLAYER = 'gameBot';
 
-    //private readonly Request $request
     public function __construct(private readonly RequestStack $requestStack)
     {
         if (

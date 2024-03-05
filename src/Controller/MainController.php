@@ -3,24 +3,24 @@
 namespace App\Controller;
 
 use AllowDynamicProperties;
-use App\Service\MultiPlayerRepository;
+use App\Service\MultiService;
 use App\Service\SinglePlayerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Error;
 
 #[AllowDynamicProperties] class MainController extends AbstractController
 {
-    private MultiPlayerRepository $multiPlayerRepository;
+    private MultiService $multiPlayerRepository;
     private SinglePlayerRepository $singlePlayerRepository;
 
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
 
-        $this->multiPlayerRepository = new MultiPlayerRepository($requestStack);
+        $this->multiPlayerRepository = new MultiService($requestStack);
         $this->singlePlayerRepository = new SinglePlayerRepository($requestStack);
     }
 
@@ -38,7 +38,7 @@ use Symfony\Component\Routing\Attribute\Route;
         } elseif ($this->requestStack->getSession()->isStarted() && $this->requestStack->getSession()->has('gameBot')) {
             $this->multiPlayerRepository->removeGameSession();
         } else {
-            throw new \Error('Session cound\'t be removed');
+            throw new Error('Session cound\'t be removed');
         }
 
         return $this->redirectToRoute('app_homepage');
