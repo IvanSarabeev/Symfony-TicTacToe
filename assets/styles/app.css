@@ -9,11 +9,11 @@
 }
 
 body {
+    height: 100%;
     width: 100vw;
     color: #f7f7f7;
     font-family: sans-serif;
     overflow-x: hidden;
-    overflow-y: hidden;
 }
 
 a {
