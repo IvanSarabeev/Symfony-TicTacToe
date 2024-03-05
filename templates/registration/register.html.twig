@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TicTacToe - Register{% endblock %}
+
+{% block body %}
+
+    <section class="vh-100 flex align-items-center justify-content-center background-radial-gradient overflow-hidden">
+        <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+            <div class="row gx-lg-5 align-items-center mb-5">
+                <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+                    <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
+                        The game <br />
+                        <span style="color: hsl(218, 81%, 75%)">everybody loves</span>
+                    </h1>
+                    <p class="mb-4 opacity-70" style="color: hsl(218, 81%, 85%)">
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                        Temporibus, expedita iusto veniam atque, magni tempora mollitia
+                        dolorum consequatur nulla, neque debitis eos reprehenderit quasi
+                        ab ipsum nisi dolorem modi. Quos?
+                    </p>
+                </div>
+
+                <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+                    <div id="radius-shape-1" class="position-absolute rounded-circle shadow-5-strong"></div>
+                    <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
+
+                    <div class="card bg-glass">
+                        <div class="card-body px-4 py-5 px-md-5">
+                            {{ form_errors(registrationForm) }}
+                            <h2 class="fs-2 fw-bold mb-4">Register</h2>
+                            <h3 class="fs-4 fw-semibold mb-3">What are you waiting</h3>
+                            {{ form_start(registrationForm) }}
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="{{ registrationForm.email.vars.id }}">Email address</label>
+                                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-control', 'placeholder': 'Enter your email'}}) }}
+                            </div>
+                            <div class="form-outline mb-4">
+                                <label class="form-label" for="{{ registrationForm.plainPassword.vars.id }}">Password</label>
+                                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Enter your password'}}) }}
+                            </div>
+                            <div class="form-check mb-4">
+                                {{ form_label(registrationForm.agreeTerms) }}
+                                {{ form_widget(registrationForm.agreeTerms) }}
+                            </div>
+                            <div class="flex flex-column align-items-center justify-content-center text-center mx-auto">
+                                <a href="{{ path('app_login') }}" class="link-primary">Have an account ? Click to log in.</a>
+                                <button type="submit" name="signup-btn" value="sign" class="btn d-flex justify-content-center btn-primary w-75 mt-2 mb-4 mx-auto">
+                                    Sign up
+                                </button>
+                            </div>
+                            {{ form_end(registrationForm) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}

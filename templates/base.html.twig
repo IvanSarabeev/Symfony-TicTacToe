@@ -33,10 +33,10 @@
                         </li>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <a href="{{ path('app_sign_page') }}" data-mdb-ripple-init type="button" class="nav-link pr-4 me-3">
-                            Login
+                        <a href="/{{ app.user ? 'logout' : 'login' }}" data-mdb-ripple-init type="button" class="nav-link pr-4 me-3">
+                            {{ app.user ? 'Logout' : 'Login' }}
                         </a>
-                        <a href="{{ path('app_sign_page') }}" data-mdb-ripple-init type="button" class="btn btn-primary me-3">
+                        <a href="{{ path('app_register') }}" data-mdb-ripple-init type="button" class="btn btn-primary me-3">
                             Sign up for free
                         </a>
                     </div>
