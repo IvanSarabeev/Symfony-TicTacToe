@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <section style="height: 100vh" class="d-flex flex-column align-items-center justify-content-center">
+    <section class="vh-100 d-flex flex-column align-items-center justify-content-center">
         <h1 class="main-heading">Chose Game Mode</h1>
         <div class="row align-items-center justify-content-center mt-5">
             <div class="col-6">
-                <a type="button" class="button" href="{{ path('app_multi') }}">Player vs Computer</a>
+                <a type="button" class="neon-btn" href="{{ path('app_multi') }}">Player vs Computer</a>
             </div>
             <div class="col-6">
-                <a type="button" class="button" href="{{ path('app_single') }}">Player vs Player</a>
+                <a type="button" class="neon-btn" href="{{ path('app_single') }}">Player vs Player</a>
             </div>
         </div>
     </section>

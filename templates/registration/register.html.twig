@@ -4,10 +4,10 @@
 
 {% block body %}
 
-    <section class="vh-100 flex align-items-center justify-content-center background-radial-gradient overflow-hidden">
-        <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
-            <div class="row gx-lg-5 align-items-center mb-5">
-                <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+    <section class="vh-100 background-radial-gradient overflow-hidden">
+        <div class="container px-4 py-5 text-center align-items-center justify-content-center text-lg-start my-5">
+            <div class="row align-content-center align-self-center align-items-center justify-content-center mt-5">
+                <div class="col mb-5 mb-lg-0" style="z-index: 10">
                     <h1 class="my-5 display-5 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)">
                         The game <br />
                         <span style="color: hsl(218, 81%, 75%)">everybody loves</span>
@@ -43,7 +43,7 @@
                                 {{ form_widget(registrationForm.agreeTerms) }}
                             </div>
                             <div class="flex flex-column align-items-center justify-content-center text-center mx-auto">
-                                <a href="{{ path('app_login') }}" class="link-primary">Have an account ? Click to log in.</a>
+                                <a href="{{ path('app_login') }}" class="link-primary">Got an account, continue forward &rarr;</a>
                                 <button type="submit" name="signup-btn" value="sign" class="btn d-flex justify-content-center btn-primary w-75 mt-2 mb-4 mx-auto">
                                     Sign up
                                 </button>

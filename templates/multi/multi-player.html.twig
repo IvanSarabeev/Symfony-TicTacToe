@@ -2,15 +2,15 @@
 
 {% block body %}
 
-    <div class=" d-flex flex-column align-items-center justify-content-center text-black mt-5 mx-auto">
-        <h2 class="fs-1 fw-bold">Tic Tac Toe</h2>
-        <aside class="gap-1 d-flex flex-column align-items-center justify-content-center my-4 mx-auto">
+    <div class="vh-100 d-flex flex-column align-items-center justify-content-center text-black mt-5 mx-auto">
+        <h2 class="fs-1 fw-bolder text-light">Tic Tac Toe</h2>
+        <aside class="gap-1 d-flex flex-column align-items-center justify-content-center my-4 mx-auto text-light">
             <h3 class="fs-3 fw-semibold">Player vs Player</h3>
             <h4 class="fs-4 fw-bold">{{ announce }}</h4>
         </aside>
 
         <form action="" method="post" class="d-block align-content-center mx-auto">
-            <div>
+            <div class="rounded-2">
                 {% for i in 0..2 %}
                     {% for j in 0..2 %}
                         {% if gameStatus|length %}
@@ -22,13 +22,9 @@
                     <br>
                 {% endfor %}
             </div>
-            <div class="row align-items-center justify-content-center my-3 mx-auto">
-                <div class="col">
-                    <a target="_parent" href="{{ path('remove-game-session') }}" id='exit' class='btn btn-info'>Exit Game</a>
-                </div>
-                <div class="col">
-                    <a class="btn btn-warning" target="_parent" id="switch" href="{{ path('app_multi') }}">Switch Mode</a>
-                </div>
+            <div class="d-flex gap-3 align-items-center justify-content-center my-3">
+                <a target="_parent" href="{{ path('remove-game-session') }}" id='exit' class='btn btn-info'>Exit Game</a>
+                <a class="btn btn-warning" target="_parent" id="switch" href="{{ path('app_multi') }}">Switch Mode</a>
             </div>
         </form>
     </div>
