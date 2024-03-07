@@ -20,15 +20,22 @@ class RegistrationFormType extends AbstractType
         $builder
             ->add('email', EmailType::class, [
                 'required' => true,
+                'invalid_message' => 'Don\'t mess with symfony!',
+                'constraints' => [
+                  new NotBlank([
+                      'message' => 'Please enter a valid email address.',
+                  ]),
+                ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'required' => true,
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'You should agree to our terms.',
+                        'message' => 'In order to continue, agree to our terms.',
                     ]),
                 ],
+                'invalid_message' => 'Don\'t mess with symfony!'
             ])
             ->add('plainPassword', PasswordType::class, [
                                 // instead of being set onto the object directly,
