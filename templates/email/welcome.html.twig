@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="container background-radial-gradient">
+        <div class="text-center">
+            <a href="{{ url('homepage') }}">
+                Visit our homepage
+            </a>
+        </div>
+        <div class="content">
+            <h1 class="text-center pt-4 pb-5 fw-normal text-white">Nice to meet you {{ user.email }}!</h1>
+            <p class="block">
+                Welcome to <strong>the TicTacToe World</strong>, we can't wait to see you win
+            </p>
+            <p class="block">
+                Check out our existing game modes and share your thoughts with the community
+            </p>
+        </div>
+    </section>
+{% endblock %}
