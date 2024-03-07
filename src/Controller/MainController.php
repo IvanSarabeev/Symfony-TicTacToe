@@ -27,6 +27,8 @@ use Error;
     #[Route('/', name: 'app_homepage')]
     public function homePage(): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'User tried to access a page without Signing in.');
+
         return $this->render('views/homepage.html.twig');
     }
 

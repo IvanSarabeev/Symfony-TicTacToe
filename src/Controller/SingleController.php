@@ -13,6 +13,8 @@ class SingleController extends AbstractController
     #[Route('/single', name: 'app_multi')]
     public function multiPlayerPage(Request $request, MultiService $multiService): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER', null, 'User tried to access a page without Signing in.');
+
         $data = $request->request->all();
         $selectedCell = $data['cell'] ?? null;
 
