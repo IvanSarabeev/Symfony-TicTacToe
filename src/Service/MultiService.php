@@ -58,7 +58,7 @@ class MultiService extends BoardCheck
         }
 
         if (!empty($emptyCells)) {
-            $randIndex = array_rand((array)$emptyCells);
+            $randIndex = array_rand($emptyCells);
             $randRow = $emptyCells[$randIndex];
 
             if ($request->get('row') !== 0) {

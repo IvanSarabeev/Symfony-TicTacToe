@@ -13,6 +13,7 @@
         {% endblock %}
     </head>
     <body class="d-flex flex-column background-radial-gradient">
+    {% block header %}
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark px-4 bg-dark">
                 <a class="navbar-brand" href="{{ path('app_homepage') }}">TicTac</a>
@@ -40,7 +41,9 @@
                 </div>
             </nav>
         </header>
-        {% block body %}{% endblock %}
+    {% endblock %}
+
+    {% block body %}{% endblock %}
     </body>
 </html>
 
