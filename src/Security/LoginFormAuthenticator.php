@@ -43,13 +43,19 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         );
     }
 
+    /** Authentication if the user matches the DB data.
+     * If he does redirect him to the homepage
+     * @param Request $request
+     * @param TokenInterface $token
+     * @param string $firewallName
+     * @return Response|null
+     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
 
-        // For example:
          return new RedirectResponse($this->urlGenerator->generate('app_homepage'));
     }
 

@@ -15,6 +15,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class RegistrationFormType extends AbstractType
 {
+    /** This method creates the form via "FormBuilderInterface" and sets the needed property's
+     * @param FormBuilderInterface $builder
+     * @param array $options
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -38,8 +43,6 @@ class RegistrationFormType extends AbstractType
                 'invalid_message' => 'Don\'t mess with symfony!'
             ])
             ->add('plainPassword', PasswordType::class, [
-                                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
                 'required' => true,
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
@@ -50,7 +53,6 @@ class RegistrationFormType extends AbstractType
                     new Length([
                         'min' => 6,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),
                 ],
