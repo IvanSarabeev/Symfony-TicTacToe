@@ -36,7 +36,7 @@ class SingleController extends AbstractController
                 $cellKeys = array_keys($data['cell'][$row]);
                 $col = array_shift($cellKeys);
 
-                $multiService->getPlayerMove($row, $col);
+                $multiService->setPlayerMove($row, $col);
                 $multiService->setBotMoves($request);
             }
         } catch ( \Exception $exception) {

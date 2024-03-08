@@ -7,6 +7,10 @@ class BoardCheck
     protected array $board = [];
     protected string $player = "X";
 
+    /** Check every possible winning options, by:
+     * column, row or diagonal
+     * @return mixed|void
+     */
     public function checkGameResult()
     {
         for ($i = 0; $i < 3; $i++) {
@@ -38,6 +42,9 @@ class BoardCheck
         }
     }
 
+    /** Render the winner if they finished the game, or they are still playing.
+     * @return string
+     */
     public function renderWinner(): string
     {
         if ($this->checkGameResult()) {
@@ -47,24 +54,5 @@ class BoardCheck
         } else {
             return "The game is still running";
         }
-    }
-
-    public function gameStatus(): bool
-    {
-        if ($this->checkGameResult() !== '') {
-            return false;
-        }
-
-        $emptyCell = 0;
-
-        foreach ($this->board as $row) {
-            foreach ($row as $cell) {
-                if ($cell === '') {
-                    $emptyCell++;
-                }
-            }
-        }
-
-        return $emptyCell === 0;
     }
 }
