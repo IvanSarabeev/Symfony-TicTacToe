@@ -16,7 +16,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RegistrationController extends AbstractController
 {
-    /**
+    /** This controller creates new registration form, then inserts the new user data to the DB
+     * if it's unique, else it will throw an error that the email is registered.
+     * After the user is created, we send to the corresponding user a letter through email,
+     * then we redirect the user to the login page, so that he can continue on.
      * @throws TransportExceptionInterface
      */
     #[Route('/register', name: 'app_register')]

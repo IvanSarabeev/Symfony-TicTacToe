@@ -13,11 +13,7 @@
             <div class="rounded-2">
                 {% for i in 0..2 %}
                     {% for j in 0..2 %}
-                        {% if gameStatus|length %}
-                            <input type='submit' data-row='{{ i }}' data-col='{{ j }}' disabled="{{ gameStatus }}" value='{{ gameBoard[i][j] }}' class='box-model' name='cell[{{ i }}][{{ j }}]'/>
-                        {% else %}
                             <input type='submit' data-row='{{ i }}' data-col='{{ j }}' value='{{ gameBoard[i][j] }}' class='box-model' name='cell[{{ i }}][{{ j }}]'/>
-                        {% endif %}
                     {% endfor %}
                     <br>
                 {% endfor %}

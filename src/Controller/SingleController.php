@@ -10,6 +10,16 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class SingleController extends AbstractController
 {
+    /** This Controller class is responsible for rendering the single game mode.
+     * It also has protected route feat. Its main duty is t get the name: "cell",
+     * then get every row & column by its corresponding array index.
+     * Then watch for the player's move after that the bot move.
+     * Inside the render pass the following params:
+     * gameBoard for rendering the 3x3 array and announce the winner
+     * @param Request $request
+     * @param MultiService $multiService
+     * @return Response
+     */
     #[Route('/single', name: 'app_multi')]
     public function multiPlayerPage(Request $request, MultiService $multiService): Response
     {

@@ -12,14 +12,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class SecurityController extends AbstractController
 {
+    /** Authentication for users that exist in the DB
+     * @param AuthenticationUtils $authenticationUtils
+     * @return Response
+     */
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-
-        // get the login error if there is one
+        // get error if the auth isn't successful
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
@@ -29,11 +29,15 @@ class SecurityController extends AbstractController
         ]);
     }
 
+    /** Users who log out from the system are redirect to the login page and a message appears.
+     * @param Request $request
+     * @return RedirectResponse
+     */
     #[Route(path: '/logout', name: 'app_logout')]
     public function logout(Request $request): RedirectResponse
     {
         $this->addFlash('warning', 'You have logged out!');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('app_login');
     }
 }

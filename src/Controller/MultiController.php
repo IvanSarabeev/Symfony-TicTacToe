@@ -11,6 +11,15 @@ use Symfony\Component\Routing\Attribute\Route;
 class MultiController extends AbstractController
 {
 
+    /** This Controller is responsible for rendering the multiplayer game mode.
+     * It's also a protected route. Its main duty is to get the name: "cell"
+     * then get every row & column by its corresponding index from [0][0] to [2][2]
+     * Then render the multiplayer view and pass the following params:
+     * gameBoard for rendering the 3x3 array and announce the winner.
+     * @param Request $request
+     * @param SingleService $singleService
+     * @return Response
+     */
     #[Route('/multi', name: 'app_single')]
     public function singlePlayerPage(Request $request, SingleService $singleService): Response
     {
@@ -35,12 +44,10 @@ class MultiController extends AbstractController
 
         $gameResult = $singleService->getBoard();
         $announce = $singleService->renderWinner();
-        $showStatus = $singleService->gameStatus();
 
         return $this->render('multi/multi-player.html.twig', [
             'gameBoard' => $gameResult,
             'announce' => $announce,
-            'gameStatus' => $showStatus
         ]);
     }
 }

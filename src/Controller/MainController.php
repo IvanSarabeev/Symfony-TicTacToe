@@ -16,6 +16,10 @@ use Error;
     private MultiService $multiService;
     private SingleService $singleService;
 
+
+    /** Initialise the services and pass them the requestStack object, as an argument for further usage.
+     * @param RequestStack $requestStack
+     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -24,16 +28,24 @@ use Error;
         $this->singleService = new SingleService($requestStack);
     }
 
+    /** Protected view for auth user's. If the user logged in correctly a message appears,
+     * then redirect them to the homepage, else if they aren't logged in they can't access the homepage.
+     * @return Response
+     */
     #[Route('/', name: 'app_homepage')]
     public function homePage(): Response
     {
-        $this->addFlash('success', 'Successfully Logged!');
-
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'User tried to access a page without Signing in.');
+
+        $this->addFlash('success', 'Successfully Logged!');
 
         return $this->render('views/homepage.html.twig');
     }
 
+    /** This method checks if a session is started by corresponding name,
+     * if the session name matches then clear the session and redirect the user to the homepage.
+     * @return Response
+     */
     #[Route('/remove-session', name: 'remove-game-session')]
     public function removeGameSession(): Response
     {
